@@ -78,34 +78,8 @@ class User {
 
     static getUsersStorage() {
 
-        let users = []
+        return Fetch.get('/users');
 
-        /*if(sessionStorage.getItem("users")) {
-
-            users = JSON.parse(sessionStorage.getItem("users"));
-        }*/
-
-        if(localStorage.getItem("users")) {
-
-            users = JSON.parse(localStorage.getItem("users"));
-        }
-
-        return users;
-
-    }
-
-    getNewID() {
-
-        let usersID = parseInt(localStorage.getItem("usersID"));
-
-
-        if(!usersID) usersID = 0;
-
-        usersID++;
-
-        localStorage.setItem("usersID", usersID);
-
-        return usersID;
     }
 
     toJSON() {
@@ -129,11 +103,11 @@ class User {
 
             if(this.id) {
 
-                promise = HttpRequest.put(`/users/${this.id}`, this.toJSON());
+                promise = Fetch.put(`/users/${this.id}`, this.toJSON());
 
             } else {
 
-                promise = HttpRequest.post(`/users`, this.toJSON());
+                promise = Fetch.post(`/users`, this.toJSON());
 
             }
 
@@ -154,21 +128,8 @@ class User {
     }
 
     remove() {
-
-        let users = User.getUsersStorage();
-
-        users.forEach((userData, index) => {
-
-            if(this._id == userData._id) {
-
-                users.splice(index, 1);
-
-            }
-            
-        });
-
-        //sessionStorage.setItem("users", JSON.stringify(users));
-        localStorage.setItem("users", JSON.stringify(users));
+        
+        return Fetch.delete(`/users/${this.id}`);
 
     }
 }
